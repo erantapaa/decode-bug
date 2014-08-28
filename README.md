@@ -26,9 +26,9 @@ The output I get is:
 #### Background
 
 * The program uses `xml-conduit` to scrape messages from a web forum page (file `1510-3.html`)
-* The module `MyDOM.hs` is a slightly modified version of`Text.HTML.DOM`:
+* The module `MyDOM.hs` is a slightly modified version of`Text.HTML.DOM` with the following changes:
   * tag and attribute names are converted to lowercase
   * the document is read using `decodeUtf8With strictDecode` instead of `lenientDecode`
-* I believe the html file conains well-formed UTF-8. The html file is read in twice - both times in `strictDecode` mode. After the first read the number of bytes, characters and space are reported. The second time it is parsed as HTML and the messages are extracted. The exception is raised during the second read.
+* I believe the HTML file contains well-formed UTF-8. The html file is read in twice - both times in `strictDecode` mode. After the first read the number of bytes, characters and space are reported. The second time it is parsed as HTML and the messages are extracted. The exception is raised during the second read.
 
 
