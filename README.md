@@ -1,9 +1,11 @@
 
 This package contains a test case for a UTF-8 decoding problem I am running into.
 
+Tested with GHC 7.8.3 (Haskell Platform 2014.2.0.0), OSX 10.8.5.
+
 To reproduce:
 
-1. Build the executable `bug` (I'm using GHC 7.8.3):
+1. Build the executable `bug`:
 
         cabal sandbox init
         cabal install --only-dependencies --force-reinstalls
@@ -29,6 +31,6 @@ The output I get is:
 * The module `MyDOM.hs` is a slightly modified version of`Text.HTML.DOM` with the following changes:
   * tag and attribute names are converted to lowercase
   * the document is read using `decodeUtf8With strictDecode` instead of `lenientDecode`
-* I believe the HTML file contains well-formed UTF-8. The html file is read in twice - both times in `strictDecode` mode. After the first read the number of bytes, characters and space are reported. The second time it is parsed as HTML and the messages are extracted. The exception is raised during the second read.
+* I believe the HTML file contains well-formed UTF-8. The html file is read in twice - both times in `strictDecode` mode. After the first read the number of bytes, characters and spaces are reported. The second time it is parsed as HTML and the messages are extracted. The exception is raised during the second read.
 
 
