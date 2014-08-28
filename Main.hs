@@ -192,5 +192,13 @@ test7 path = do
       else return ()
   return ()
 
-main = test7 "1510-3.html"
+main = do
+  let path = "1510-3.html"
+  bytes <- BS.readFile path
+  let chars = decodeUtf8With strictDecode bytes
+      spaceCount = length $ filter (==' ') $ T.unpack chars
+  putStrLn $ "in file " <> path <> ", number of bytes: " <> (show $ BS.length bytes)
+                        <> " chars: " <> show (T.length chars)
+                        <> " spaces: " <> (show spaceCount)
+  test7 path
 
