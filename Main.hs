@@ -17,6 +17,7 @@ import qualified MyDOM as X
 import qualified Text.XML as X hiding (parseLBS)
 import qualified Text.XML.Cursor as X
 import Text.XML.Cursor (($/), ($//), fromDocument, followingSibling, node, element, attribute, checkElement, attributeIs)
+import qualified Text.HTML.DOM as H
 
 import Data.Text.Encoding.Error (lenientDecode,strictDecode)
 import Data.Monoid ((<>))
@@ -191,6 +192,18 @@ test7 path = do
       then print m
       else return ()
   return ()
+
+main2 = do
+  doc <- readHtml "1510-3.html" -- from MyDOM - uses strictDecode 
+  let bytes = X.renderLBS X.def doc
+  LBS.writeFile "./output2.html" bytes
+  putStrLn "output written to file output2.html"
+
+main3 = do
+  doc <- H.readFile "1510-3.html"  -- from Text.HTML.DOM - uses lenientDecode
+  let bytes = X.renderLBS X.def doc
+  LBS.writeFile "./output3.html" bytes
+  putStrLn "output written to file output3.html"
 
 main = do
   let path = "1510-3.html"
