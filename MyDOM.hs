@@ -50,7 +50,7 @@ eventConduit =
   where
     go stack = do
         mx <- await
-        case fmap (entities . fixNames . fmap' (decodeUtf8With strictDecode)) mx of
+        case fmap (entities . fixNames . fmap' (decodeUtf8With lenientDecode)) mx of
             Nothing -> closeStack stack
 
             -- Ignore processing instructions (or pseudo-instructions)

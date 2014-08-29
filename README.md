@@ -21,7 +21,13 @@ To reproduce:
         output written to file output2.html
         *Main> main3
         in file 1510-3.html, number of bytes: 75632 chars: 75046 spaces: 4396
-    
+        *Main> main4
+        Message count: 71
+        Found Unicode special character in:
+        M {messageId_ = "633099125665929015", parentId_ = ...
+
+In output of `main4`, look for the code points `\65533\65533`.
+
 #### Notes
 
 * The program uses `xml-conduit` to scrape messages from a web forum page (file `1510-3.html`)
@@ -30,4 +36,6 @@ To reproduce:
 * `main1a` reads the HTML file (as a strict ByteString) using `strictDecode` and writes it back out as `output1a.html`
 * `main2` reads the HTML file using `lenientDecode` and writes it back out as `output2.html`
 * `main3` reads the HTML file (as a strict ByteString) using `strictDecode` and counts the number of code-points and spaces
-* I believe the HTML file contains well-formed UTF-8. There is a perl script `check-utf8` which validates it.
+* `main4` reads the HTML file using `lenientDecode` downcasing tag and attribute names and scrapes messages from it using `Text.XML.Cursor`
+* I believe the HTML file contains well-formed UTF-8. There is a perl script `check-utf8` which validates it. In particular it does not contain the code-point `\65533`.
+

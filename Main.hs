@@ -167,7 +167,7 @@ messagesFromDoc problemId doc =
   in concatMap (extractAllMessages problemId "(no parent)") roots
 
 checkText :: T.Text -> Bool
-checkText txt = all (\c -> ord c < 65500) $ T.unpack txt
+checkText txt = all (\c -> ord c < 0xfff0) $ T.unpack txt
 
 -- | check all of the fields for any bad characters
 checkMessage :: Message -> Bool
@@ -178,14 +178,14 @@ test6 path = do
   return $ T.length $ decodeUtf8With strictDecode bytes
 
 test7 path = do
-  doc <- fmap MyDOM.parseLBS $ LBS.readFile path
+  doc <- fmap MyDOM.parseLBS $ LBS.readFile path -- uses lenientDecode
   let msgs = messagesFromDoc "ZZZZ" doc
   putStrLn $ "Message count: " ++ show (length msgs)
   let go txt field = undefined
   forM_ msgs $ \m -> do
-    T.putStrLn $ "checking message " <> (messageId_ m)
+    -- T.putStrLn $ "checking message " <> (messageId_ m)
     if not $ checkMessage m
-      then print m
+      then do putStrLn "Found Unicode special character in:"; print m
       else return ()
   return ()
 
