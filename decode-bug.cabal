@@ -16,7 +16,7 @@ cabal-version:       >=1.10
 
 executable bug
   main-is:             Main.hs
-  other-modules:       MyDOM
+  other-modules:       MyDOM, NewDOM
   other-extensions:    OverloadedStrings, CPP
   build-depends:
       base == 4.7.0.1

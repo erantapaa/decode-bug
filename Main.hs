@@ -13,7 +13,8 @@ import qualified Text.Regex.TDFA as RE
 import qualified Text.Regex.TDFA.Text as RE
 import Text.Regex.TDFA ((=~))
 
-import qualified MyDOM as X
+import qualified MyDOM as MyDOM
+import qualified NewDOM as NewDOM
 import qualified Text.XML as X hiding (parseLBS)
 import qualified Text.XML.Cursor as X
 import Text.XML.Cursor (($/), ($//), fromDocument, followingSibling, node, element, attribute, checkElement, attributeIs)
@@ -35,11 +36,6 @@ mkList a = [a]
 
 toList (Just x) = [x]
 toList _        = []
-
--- | read a X.Document from a file
-readHtml path = do
-  bytes <- LBS.readFile path
-  return $ X.parseLBS bytes
 
 data Message = M { messageId_ :: Text,
                    parentId_  :: Text,
@@ -182,7 +178,7 @@ test6 path = do
   return $ T.length $ decodeUtf8With strictDecode bytes
 
 test7 path = do
-  doc <- readHtml path
+  doc <- fmap MyDOM.parseLBS $ LBS.readFile path
   let msgs = messagesFromDoc "ZZZZ" doc
   putStrLn $ "Message count: " ++ show (length msgs)
   let go txt field = undefined
@@ -193,19 +189,19 @@ test7 path = do
       else return ()
   return ()
 
+main1 = do
+  doc <- fmap NewDOM.parseLBS $ LBS.readFile "1510-3.html" -- uses strictDecode
+  let bytes = X.renderLBS X.def doc
+  LBS.writeFile "./output1.html" bytes
+  putStrLn "output written to file output1.html"
+
 main2 = do
-  doc <- readHtml "1510-3.html" -- from MyDOM - uses strictDecode 
+  doc <- H.readFile "1510-3.html"  -- from Text.HTML.DOM - uses lenientDecode
   let bytes = X.renderLBS X.def doc
   LBS.writeFile "./output2.html" bytes
   putStrLn "output written to file output2.html"
 
 main3 = do
-  doc <- H.readFile "1510-3.html"  -- from Text.HTML.DOM - uses lenientDecode
-  let bytes = X.renderLBS X.def doc
-  LBS.writeFile "./output3.html" bytes
-  putStrLn "output written to file output3.html"
-
-main = do
   let path = "1510-3.html"
   bytes <- BS.readFile path
   let chars = decodeUtf8With strictDecode bytes
@@ -213,5 +209,8 @@ main = do
   putStrLn $ "in file " <> path <> ", number of bytes: " <> (show $ BS.length bytes)
                         <> " chars: " <> show (T.length chars)
                         <> " spaces: " <> (show spaceCount)
-  test7 path
+main4 = do
+  test7 "1510-3.html"
+
+main = main1
 
