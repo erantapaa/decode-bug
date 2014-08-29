@@ -195,6 +195,13 @@ main1 = do
   LBS.writeFile "./output1.html" bytes
   putStrLn "output written to file output1.html"
 
+main1a = do
+  bytes <- BS.readFile "1510-3.html"
+  let doc = NewDOM.parseLBS (LBS.fromStrict bytes)
+      output = X.renderLBS X.def doc
+  LBS.writeFile "./output1a.html" output
+  putStrLn "output written to file output1a.html"
+
 main2 = do
   doc <- H.readFile "1510-3.html"  -- from Text.HTML.DOM - uses lenientDecode
   let bytes = X.renderLBS X.def doc
